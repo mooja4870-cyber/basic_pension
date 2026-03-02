@@ -13,8 +13,32 @@ st.markdown("""
     .stApp {
         background-color: #0A0F14;
     }
+    /* 타이틀 스타일 */
+    .title-text {
+        color: #FFFFFF;
+        font-size: 39px;
+        font-weight: 800;
+        text-align: center;
+        line-height: 1.2;
+        margin-bottom: 20px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    /* 서브타이틀 스타일 */
+    .subtitle-text {
+        color: #94A3B8;
+        text-align: center;
+        font-size: 20px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+    /* 버튼 스타일 및 중앙 정렬 */
+    .stButton {
+        display: flex;
+        justify-content: center;
+    }
     .stButton>button {
-        width: 100%;
+        width: 90% !important;
+        max-width: 400px;
         border-radius: 12px;
         height: 3.5em;
         font-size: 20px !important;
@@ -29,22 +53,21 @@ st.markdown("""
         transform: scale(1.02);
         background-color: #1545b5 !important;
     }
-    .title-text {
-        color: #FFFFFF;
-        font-size: 39px;
-        font-weight: 800;
-        text-align: center;
-        line-height: 1.2;
-        margin-bottom: 20px;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    /* 이미지 중앙 정렬 */
+    [data-testid="stImage"] {
+        display: flex;
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
     }
-    .subtitle-text {
-        color: #94A3B8;
+    /* 하단 푸터 스타일 */
+    .footer-text {
         text-align: center;
-        font-size: 20px;
-        line-height: 1.6;
-        margin-bottom: 30px;
+        font-size: 16px;
+        color: #64748B;
+        margin-top: 30px;
     }
+    /* 기타 UI 요소 */
     .info-box {
         background-color: #1E293B;
         padding: 20px;
@@ -69,11 +92,6 @@ st.markdown("""
         font-size: 28px;
         font-weight: bold;
         color: #60A5FA;
-    }
-    /* Centering image */
-    [data-testid="stImage"] {
-        display: flex;
-        justify-content: center;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -102,16 +120,22 @@ if st.session_state.step == 1:
     </div>
     """, unsafe_allow_html=True)
     
-    st.image("https://img.icons8.com/clouds/256/museum.png", width=180) # 로고용 이미지 예시
+    # 이미지 중앙 정렬을 위해 컬럼 활용
+    _, col_img, _ = st.columns([1, 2, 1])
+    with col_img:
+        st.image("https://img.icons8.com/clouds/256/museum.png", width=220)
     
-    if st.button("👉 진단 시작하기"):
-        next_step()
+    # 버튼 중앙 정렬을 위해 컬럼 활용
+    _, col_btn, _ = st.columns([1, 4, 1])
+    with col_btn:
+        if st.button("👉 진단 시작하기"):
+            next_step()
     
     st.markdown("""
-    <p style="text-align: center; font-size: 16px; color: #64748B; margin-top: 30px;">
+    <div class="footer-text">
         📺 시니어 본색 유튜브 채널 제공<br>
         <span style="color: #10B981; font-weight: 500;">✅ 2026년 기준 최신 정보</span>
-    </p>
+    </div>
     """, unsafe_allow_html=True)
 
 elif st.session_state.step == 2:
