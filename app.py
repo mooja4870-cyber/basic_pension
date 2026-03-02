@@ -15,14 +15,13 @@ st.markdown("""
         background-color: #0A0F14;
     }
     
-    /* 기본 스트림릿 패딩 제거 및 중앙 정렬 강제 */
+    /* 기본 스트림릿 패딩 제거 및 상단 여백 확보 */
     .block-container {
-        padding-top: 2rem !important;
+        padding-top: 6rem !important;
         padding-bottom: 2rem !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        justify-content: center !important;
     }
 
     /* 모든 요소가 부모 너비 안에서 정중앙에 오도록 설정 */
