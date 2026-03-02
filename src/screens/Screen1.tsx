@@ -6,35 +6,44 @@ interface Props {
 
 export const Screen1: React.FC<Props> = ({ onNext }) => {
   return (
-    <div className="min-h-screen bg-[#FFF8E7] flex flex-col items-center justify-center px-6 py-10 animate-fade-in">
+    <div className="min-h-screen bg-[#0A0F14] flex flex-col items-center justify-center px-6 py-10 animate-fade-in text-white">
       {/* Logo */}
-      <div className="w-44 h-44 bg-white rounded-full shadow-lg flex items-center justify-center mb-8 animate-bounce-in">
-        <span className="text-8xl">🏛️</span>
+      <div className="mb-10 animate-bounce-in flex flex-col items-center">
+        <img
+          src="https://img.icons8.com/clouds/256/museum.png"
+          alt="Museum Logo"
+          className="w-48 h-48 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+        />
       </div>
 
       {/* Title */}
-      <h1 className="text-[32px] font-bold text-[#222222] text-center leading-snug mb-4">
+      <h1 className="text-[39px] font-bold text-white text-center leading-tight mb-4 drop-shadow-md">
         기초연금<br />자격 자가진단
       </h1>
 
       {/* Subtitle */}
-      <p className="text-[22px] text-[#555555] text-center leading-relaxed mb-10">
-        내가 기초연금을<br />받을 수 있는지 확인해보세요!
+      <p className="text-[20px] text-slate-400 text-center leading-relaxed mb-12">
+        내가 기초연금을 받을 수 있는지<br />
+        <span className="text-slate-300 font-medium">2026년 최신 기준</span>으로 확인해보세요!
       </p>
 
       {/* Start Button */}
-      <button
-        onClick={onNext}
-        className="w-[90%] max-w-md h-20 bg-[#1A56DB] text-white text-[26px] font-bold rounded-2xl shadow-lg hover:bg-[#1545b5] active:scale-[0.98] transition-all duration-200"
-      >
-        👉 진단 시작하기
-      </button>
+      <div className="w-full flex justify-center">
+        <button
+          onClick={onNext}
+          className="w-[90%] max-w-md h-20 bg-[#1A56DB] text-white text-[26px] font-bold rounded-2xl shadow-[0_4px_20px_rgba(26,86,219,0.3)] hover:bg-[#1545b5] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-3"
+        >
+          <span>👉</span> 진단 시작하기
+        </button>
+      </div>
 
       {/* Info */}
-      <p className="text-[18px] text-[#888888] text-center mt-8 leading-relaxed">
-        📺 시니어 본색 유튜브 채널 제공<br />
-        ✅ 2026년 기준 최신 정보
-      </p>
+      <div className="mt-12 text-center">
+        <p className="text-[16px] text-slate-500 leading-relaxed flex flex-col items-center gap-1">
+          <span className="flex items-center gap-2">📺 시니어 본색 유튜브 채널 제공</span>
+          <span className="flex items-center gap-2 text-emerald-400/80 font-medium">✅ 2026년 기준 최신 정보</span>
+        </p>
+      </div>
     </div>
   );
 };
