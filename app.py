@@ -7,11 +7,11 @@ st.set_page_config(
     layout="centered"
 )
 
-# 커스텀 CSS (프리미엄 느낌을 주기 위해)
+# 커스텀 CSS (프리미엄 다크 테마)
 st.markdown("""
 <style>
-    .main {
-        background-color: #FFF8E7;
+    .stApp {
+        background-color: #0A0F14;
     }
     .stButton>button {
         width: 100%;
@@ -23,41 +23,57 @@ st.markdown("""
         color: white !important;
         border: none;
         transition: all 0.2s ease;
+        box-shadow: 0 4px 15px rgba(26, 86, 219, 0.3);
     }
     .stButton>button:hover {
         transform: scale(1.02);
         background-color: #1545b5 !important;
     }
     .title-text {
-        color: #222222;
-        font-size: 32px;
+        color: #FFFFFF;
+        font-size: 39px;
         font-weight: 800;
         text-align: center;
-        line-height: 1.4;
+        line-height: 1.2;
         margin-bottom: 20px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .subtitle-text {
+        color: #94A3B8;
+        text-align: center;
+        font-size: 20px;
+        line-height: 1.6;
+        margin-bottom: 30px;
     }
     .info-box {
-        background-color: white;
+        background-color: #1E293B;
         padding: 20px;
         border-radius: 15px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         margin-bottom: 20px;
+        color: #E2E8F0;
     }
     .highlight-red {
-        color: #D32F2F;
+        color: #F87171;
         font-weight: bold;
     }
     .success-box {
-        background-color: #E8F5E9;
+        background-color: #064E3B;
         padding: 25px;
         border-radius: 20px;
         text-align: center;
         margin-bottom: 25px;
+        color: #ECFDF5;
     }
     .result-amount {
         font-size: 28px;
         font-weight: bold;
-        color: #1A56DB;
+        color: #60A5FA;
+    }
+    /* Centering image */
+    [data-testid="stImage"] {
+        display: flex;
+        justify-content: center;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -80,20 +96,21 @@ if st.session_state.step == 1:
     # 화면 1: 시작
     st.markdown('<div class="title-text">🏛️ 기초연금<br>자격 자가진단</div>', unsafe_allow_html=True)
     st.markdown("""
-    <p style="text-align: center; font-size: 20px; color: #555555;">
-        내가 기초연금을 받을 수 있는지<br>2026년 최신 기준으로 확인해보세요!
-    </p>
+    <div class="subtitle-text">
+        내가 기초연금을 받을 수 있는지<br>
+        <span style="color: #E2E8F0; font-weight: 500;">2026년 최신 기준</span>으로 확인해보세요!
+    </div>
     """, unsafe_allow_html=True)
     
-    st.image("https://img.icons8.com/clouds/256/museum.png", width=150) # 로고용 이미지 예시
+    st.image("https://img.icons8.com/clouds/256/museum.png", width=180) # 로고용 이미지 예시
     
     if st.button("👉 진단 시작하기"):
         next_step()
     
     st.markdown("""
-    <p style="text-align: center; font-size: 16px; color: #888888; margin-top: 30px;">
+    <p style="text-align: center; font-size: 16px; color: #64748B; margin-top: 30px;">
         📺 시니어 본색 유튜브 채널 제공<br>
-        ✅ 2026년 기준 최신 정보
+        <span style="color: #10B981; font-weight: 500;">✅ 2026년 기준 최신 정보</span>
     </p>
     """, unsafe_allow_html=True)
 
