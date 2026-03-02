@@ -7,15 +7,6 @@ interface Props {
 export const Screen1: React.FC<Props> = ({ onNext }) => {
   return (
     <div className="min-h-screen bg-[#0A0F14] flex flex-col items-center justify-center px-6 py-10 animate-fade-in text-white">
-      {/* Logo */}
-      <div className="mb-10 animate-bounce-in flex flex-col items-center">
-        <img
-          src="https://img.icons8.com/clouds/256/museum.png"
-          alt="Museum Logo"
-          className="w-48 h-48 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-        />
-      </div>
-
       {/* Title */}
       <h1 className="text-[39px] font-bold text-white text-center leading-tight mb-4 drop-shadow-md">
         기초연금<br />자격 자가진단

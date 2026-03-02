@@ -143,9 +143,6 @@ if st.session_state.step == 1:
     </div>
     """, unsafe_allow_html=True)
     
-    # 시스템적으로 중앙 정렬을 강제하는 단일 이미지 출력
-    st.image("https://img.icons8.com/clouds/256/museum.png", width=220)
-    
     # 시스템적으로 중앙 정렬을 강제하는 단일 버튼 출력
     if st.button("👉 진단 시작하기"):
         next_step()
