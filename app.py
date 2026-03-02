@@ -7,67 +7,94 @@ st.set_page_config(
     layout="centered"
 )
 
-# 커스텀 CSS (프리미엄 다크 테마)
+# 커스텀 CSS (완벽한 중앙 정렬 시스템 적용)
 st.markdown("""
 <style>
+    /* 전체 배경 설정 */
     .stApp {
         background-color: #0A0F14;
     }
+    
+    /* 기본 스트림릿 패딩 제거 및 중앙 정렬 강제 */
+    .block-container {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* 모든 요소가 부모 너비 안에서 정중앙에 오도록 설정 */
+    [data-testid="stVerticalBlock"] > div {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+
     /* 타이틀 스타일 */
     .title-text {
         color: #FFFFFF;
         font-size: 39px;
         font-weight: 800;
-        text-align: center;
         line-height: 1.2;
         margin-bottom: 20px;
         text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        width: 100%;
     }
+    
     /* 서브타이틀 스타일 */
     .subtitle-text {
         color: #94A3B8;
-        text-align: center;
         font-size: 20px;
         line-height: 1.6;
         margin-bottom: 30px;
+        width: 100%;
     }
-    /* 버튼 스타일 및 중앙 정렬 */
+
+    /* 이미지 스타일 및 강제 중앙 정렬 */
+    [data-testid="stImage"] {
+        display: flex !important;
+        justify-content: center !important;
+        width: 100% !important;
+    }
+    
+    /* 버튼 래퍼 및 버튼 스타일 */
     .stButton {
-        display: flex;
-        justify-content: center;
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        margin-top: 10px;
     }
-    .stButton>button {
+    .stButton > button {
         width: 90% !important;
-        max-width: 400px;
-        border-radius: 12px;
-        height: 3.5em;
-        font-size: 20px !important;
+        max-width: 380px !important;
+        border-radius: 16px !important;
+        height: 4em !important;
+        font-size: 22px !important;
         font-weight: bold !important;
         background-color: #1A56DB !important;
         color: white !important;
-        border: none;
-        transition: all 0.2s ease;
-        box-shadow: 0 4px 15px rgba(26, 86, 219, 0.3);
+        border: none !important;
+        box-shadow: 0 10px 25px rgba(26, 86, 219, 0.4) !important;
+        transition: all 0.3s ease !important;
     }
-    .stButton>button:hover {
-        transform: scale(1.02);
-        background-color: #1545b5 !important;
+    .stButton > button:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 15px 30px rgba(26, 86, 219, 0.5) !important;
     }
-    /* 이미지 중앙 정렬 */
-    [data-testid="stImage"] {
-        display: flex;
-        justify-content: center;
-        margin-left: auto;
-        margin-right: auto;
-    }
+
     /* 하단 푸터 스타일 */
     .footer-text {
-        text-align: center;
         font-size: 16px;
         color: #64748B;
-        margin-top: 30px;
+        margin-top: 40px;
+        width: 100%;
     }
-    /* 기타 UI 요소 */
+
+    /* 기타 UI 요소 (결과 화면용) */
     .info-box {
         background-color: #1E293B;
         padding: 20px;
@@ -75,6 +102,7 @@ st.markdown("""
         box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         margin-bottom: 20px;
         color: #E2E8F0;
+        text-align: left !important;
     }
     .highlight-red {
         color: #F87171;
@@ -87,11 +115,6 @@ st.markdown("""
         text-align: center;
         margin-bottom: 25px;
         color: #ECFDF5;
-    }
-    .result-amount {
-        font-size: 28px;
-        font-weight: bold;
-        color: #60A5FA;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -120,16 +143,12 @@ if st.session_state.step == 1:
     </div>
     """, unsafe_allow_html=True)
     
-    # 이미지 중앙 정렬을 위해 컬럼 활용
-    _, col_img, _ = st.columns([1, 2, 1])
-    with col_img:
-        st.image("https://img.icons8.com/clouds/256/museum.png", width=220)
+    # 시스템적으로 중앙 정렬을 강제하는 단일 이미지 출력
+    st.image("https://img.icons8.com/clouds/256/museum.png", width=220)
     
-    # 버튼 중앙 정렬을 위해 컬럼 활용
-    _, col_btn, _ = st.columns([1, 4, 1])
-    with col_btn:
-        if st.button("👉 진단 시작하기"):
-            next_step()
+    # 시스템적으로 중앙 정렬을 강제하는 단일 버튼 출력
+    if st.button("👉 진단 시작하기"):
+        next_step()
     
     st.markdown("""
     <div class="footer-text">
