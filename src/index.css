@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Pretendard", "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Tailwind v4 class-based dark mode support */
+@variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.3s ease;
+  }
+  
+  body {
+    @apply bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-50;
+    font-size: 18px; /* Base font size increased for seniors */
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Ensure all buttons have a clear active state for touch feedback */
+  button:active {
+    @apply scale-95 opacity-80;
+    transition: transform 0.1s ease-in-out;
+  }
+}
+
+/* Custom scrollbar for better visibility */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 rounded-full;
+}
+
+/* High contrast focus states */
+:focus-visible {
+  @apply outline-4 outline-emerald-500 outline-offset-2;
+}

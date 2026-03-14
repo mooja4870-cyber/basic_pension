@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">2026 기초연금 가이드</string>
+    <string name="title_activity_main">2026 기초연금 가이드</string>
+    <string name="package_name">com.welfaremaster.app</string>
+    <string name="custom_url_scheme">com.welfaremaster.app</string>
+</resources>
