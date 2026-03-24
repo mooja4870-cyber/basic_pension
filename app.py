@@ -1,151 +1,105 @@
-# app.py
-import streamlit as st
-import pandas as pd
 import altair as alt
-from src.config.app_config import Config
-from src.service.pension_service import PensionService
+import pandas as pd
+import streamlit as st
 
-# 1. Page Configuration (Rich UI)
+from src.calculator import PolicyConfig, calculate_result
+
 st.set_page_config(
-    page_title=Config.APP_TITLE,
-    page_icon=Config.APP_ICON,
-    layout=Config.PAGE_LAYOUT,
-    initial_sidebar_state="expanded"
+    page_title="기초연금 모의 계산기",
+    page_icon="📘",
+    layout="wide",
 )
 
-# 2. Add Custom CSS (Rich Aesthetics)
-st.markdown("""
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
+st.title("기초연금 모의 계산기")
+st.caption("실제 심사는 국민연금공단 산정 결과를 따릅니다. 아래 값은 모의 계산용입니다.")
 
-    html, body, [class*="css"] {
-        font-family: 'Outfit', sans-serif;
-    }
-
-    .main-header {
-        font-size: 3rem;
-        font-weight: 800;
-        background: -webkit-linear-gradient(#f953c6, #b91d73);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-
-    .card {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 15px;
-        padding: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        margin-bottom: 1rem;
-    }
-
-    .status-pass {
-        color: #00ff88;
-        font-weight: bold;
-        font-size: 1.5rem;
-    }
-
-    .status-fail {
-        color: #ff4b4b;
-        font-weight: bold;
-        font-size: 1.5rem;
-    }
-
-    .metric-container {
-        display: flex;
-        justify-content: space-around;
-        gap: 15px;
-    }
-
-    .metric-box {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 20px;
-        border-radius: 12px;
-        text-align: center;
-        width: 100%;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    /* Hover effects for interactive feeling */
-    .metric-box:hover {
-        transform: translateY(-5px);
-        transition: 0.3s ease;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# 3. Sidebar
 with st.sidebar:
-    st.header(f" {Config.APP_ICON} {Config.SIDEBAR_HEADER}")
-    st.markdown("---")
-    st.success("2024년 최신 기준 반영 완료")
-    
-    st.info("""
-    기초연금은 만 65세 이상 어르신 중 
-    소득 하위 70%를 대상으로 합니다.
-    이 서비스를 통해 **예상 수령액**을 확인해 보세요.
-    """)
+    st.header("입력값")
+    household_type = st.radio("가구 형태", ["단독가구", "부부가구"], index=0)
+    monthly_income = st.number_input("월 소득(원)", min_value=0, value=1_500_000, step=10_000)
+    total_assets = st.number_input("총 자산(원)", min_value=0, value=160_000_000, step=1_000_000)
+    total_debt = st.number_input("총 부채(원)", min_value=0, value=20_000_000, step=1_000_000)
 
-# 4. Main Header
-st.markdown('<div class="main-header">🎁 기초연금 정밀 계산기 & 가이드</div>', unsafe_allow_html=True)
+    with st.expander("정책 기준값(필요 시 조정)"):
+        earned_income_deduction = st.number_input(
+            "근로소득 기본공제(원)", min_value=0, value=1_100_000, step=10_000
+        )
+        earned_income_rate = st.slider(
+            "공제 후 반영 비율", min_value=0.0, max_value=1.0, value=0.7, step=0.05
+        )
+        base_asset_deduction = st.number_input(
+            "기본재산 공제(원)", min_value=0, value=135_000_000, step=1_000_000
+        )
+        asset_conversion_rate = st.slider(
+            "재산 소득환산 연이율", min_value=0.0, max_value=0.1, value=0.04, step=0.005
+        )
+        single_limit = st.number_input(
+            "단독가구 선정 기준액(원)", min_value=0, value=2_130_000, step=10_000
+        )
+        couple_limit = st.number_input(
+            "부부가구 선정 기준액(원)", min_value=0, value=3_408_000, step=10_000
+        )
+        single_max_pension = st.number_input(
+            "단독가구 최대 연금(원)", min_value=0, value=334_810, step=1_000
+        )
+        couple_max_pension = st.number_input(
+            "부부가구 최대 연금(원)", min_value=0, value=535_690, step=1_000
+        )
 
-# 5. Dashboard Grid
-col1, col2 = st.columns([1, 1], gap="large")
+config = PolicyConfig(
+    earned_income_deduction=int(earned_income_deduction),
+    earned_income_reflection_rate=float(earned_income_rate),
+    base_asset_deduction=int(base_asset_deduction),
+    annual_asset_conversion_rate=float(asset_conversion_rate),
+    single_household_limit=int(single_limit),
+    couple_household_limit=int(couple_limit),
+    single_household_max_pension=int(single_max_pension),
+    couple_household_max_pension=int(couple_max_pension),
+)
 
-with col1:
-    st.markdown('<div class="card">🏠 기본 정보 입력</div>', unsafe_allow_html=True)
-    is_single = st.radio("가구 형태", ["단독가구", "부부가구"]) == "단독가구"
-    
-    income = st.number_input("월 총 소득 (원)", value=1500000, step=10000, format="%d")
-    assets = st.number_input("현재 보유 자산 (부동산, 예금 등)", value=150000000, step=1000000, format="%d")
-    debt = st.number_input("부채 (대출금 등)", value=20000000, step=1000000, format="%d")
+is_single = household_type == "단독가구"
+result = calculate_result(
+    monthly_income=monthly_income,
+    assets=total_assets,
+    debt=total_debt,
+    is_single_household=is_single,
+    config=config,
+)
 
-with col2:
-    st.markdown('<div class="card">📊 분석 결과</div>', unsafe_allow_html=True)
-    
-    # Calculation
-    recognition_amount = PensionService.calculate_income_recognition_amount(income, assets, debt)
-    is_eligible, limit = PensionService.check_eligibility(recognition_amount, is_single)
-    max_pension = PensionService.get_max_pension_amount(is_single)
-    
-    st.markdown('<div class="metric-container">', unsafe_allow_html=True)
-    st.markdown(f'''
-    <div class="metric-box">
-        <div style="font-size: 0.9rem; opacity: 0.9;">월 소득인정액</div>
-        <div style="font-size: 1.8rem; font-weight: bold;">{recognition_amount:,}원</div>
-    </div>
-    ''', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    st.markdown("---")
-    
-    if is_eligible:
-        st.markdown(f'<div class="status-pass">🎉 축하합니다! 수급 대상자입니다.</div>', unsafe_allow_html=True)
-        st.write(f"최대 월 **{max_pension:,}원**을 받으실 수 있을 것으로 보입니다.")
-    else:
-        st.markdown(f'<div class="status-fail">⚠️ 대상이 아닐 가능성이 큽니다.</div>', unsafe_allow_html=True)
-        st.write(f"선정 기준액인 **{limit:,}원**을 초과하였습니다.")
+col1, col2, col3 = st.columns(3)
+col1.metric("소득인정액", f"{result.recognized_income:,.0f}원")
+col2.metric("선정기준액", f"{result.limit_amount:,.0f}원")
+col3.metric("예상 최대연금", f"{result.max_pension:,.0f}원")
 
-# 6. Visual Analysis
-st.markdown("---")
-st.markdown("### 📈 소득 항목별 비중 분석")
+if result.eligible:
+    st.success("모의 계산 결과: 수급 가능 구간으로 계산되었습니다.")
+else:
+    st.error("모의 계산 결과: 기준액을 초과했습니다.")
 
-# Example Data for Pie Chart
-plot_data = pd.DataFrame({
-    "Category": ["근로소득", "재산소득환산", "기타"],
-    "Value": [income * 0.7, (assets-debt) * 0.04 / 12, 0]
-})
+breakdown_df = pd.DataFrame(
+    {
+        "항목": ["근로소득 반영액", "재산 소득환산액"],
+        "금액": [result.income_component, result.asset_component],
+    }
+)
 
-chart = alt.Chart(plot_data).mark_arc(innerRadius=50).encode(
-    theta=alt.Theta(field="Value", type="quantitative"),
-    color=alt.Color(field="Category", type="nominal", scale=alt.Scale(scheme='viridis')),
-    tooltip=["Category", "Value"]
-).properties(height=300)
+chart = (
+    alt.Chart(breakdown_df)
+    .mark_bar(cornerRadiusTopLeft=8, cornerRadiusTopRight=8)
+    .encode(
+        x=alt.X("항목:N", title="구성 항목"),
+        y=alt.Y("금액:Q", title="원"),
+        tooltip=["항목", alt.Tooltip("금액:Q", format=",.0f")],
+        color=alt.Color("항목:N", legend=None),
+    )
+    .properties(height=320)
+)
 
+st.subheader("소득인정액 구성")
 st.altair_chart(chart, use_container_width=True)
 
-st.caption("주의: 위 결과는 실제 공단 계산 결과와 다를 수 있는 모의 수치입니다.")
+st.markdown("---")
+st.markdown(
+    "- 이 앱은 배포용 템플릿이며, 정책값은 사이드바에서 바로 조정할 수 있습니다.  \n"
+    "- Streamlit Community Cloud 배포 시 `app.py`를 Main file path로 지정하면 됩니다."
+)

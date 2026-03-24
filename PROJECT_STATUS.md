@@ -1,35 +1,21 @@
-# PROJECT_STATUS.md
+# PROJECT_STATUS
 
-## 📅 마지막 업데이트: 2026-03-24 19:30
+## 마지막 업데이트
+- 2026-03-25
 
-### 🚀 대시보드 요약
-- **목표:** 기초연금 정보 제공 및 계산기 서비스 (Streamlit 앱)
-- **현재 진행률:** 5% (초기 구조 생성 중)
-- **상태:** ✅ 개발 환경 초기화 완료
+## 현재 상태
+- 기존 소스 전면 교체 완료
+- Streamlit 앱 재구성 완료 (`app.py`, `src/calculator.py`)
+- 배포 준비 파일 반영 완료 (`.streamlit/config.toml`, `README.md`, `.gitignore`)
+- 테스트 코드 추가 완료 (`tests/test_calculator.py`)
 
----
+## 배포 체크리스트
+- [x] 의존성 고정 (`requirements.txt`)
+- [x] Streamlit 설정 파일 준비
+- [x] 로컬 테스트 코드 준비
+- [ ] Streamlit Cloud 대시보드에서 앱 생성
 
-## 🏗️ 프로젝트 구조 (현재)
-- `app.py`: 메인 애플리케이션 파일
-- `src/`: 소스 코드 디렉토리
-  - `controller/`: 로직 제어
-  - `service/`: 데이터 처리 및 연산
-  - `utils/`: 공통 기능
-  - `config/`: 설정값 관리
-- `requirements.txt`: 라이브러리 목록
-- `PROJECT_STATUS.md`: 작업 로그 및 상태 (본 파일)
-
----
-
-## ✅ 완료된 작업
-1. `2026-03-24`: 기존 소스 코드 완전 삭제
-2. `2026-03-24`: 신규 폴더 구조 생성
-3. `2026-03-24`: 프로젝트 상태 기록 파일(`PROJECT_STATUS.md`) 생성
-
----
-
-## 🛠️ 다음 작업 계획
-1. `requirements.txt` 작성 및 라이브러리 정의
-2. `app.py` 기초 뼈대 구축
-3. 기초연금 계산 로직(`service/`) 구현
-4. Git Push 및 Streamlit 테스트
+## 다음 단계
+1. `pytest -q` 실행
+2. `streamlit run app.py` 로 로컬 확인
+3. GitHub push 후 Streamlit Cloud 연결
